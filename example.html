@@ -6,12 +6,50 @@
 </head>
 <body>
 
-<div id="investigation_file"></div>
+<div id="investigation_file" class="isa-view">
+    <div class="isa-study-list">
+        <h3>Studies</h3>
+        <ul id="study-list">
+        </ul>
+    </div>
 
+    <div class="isa-main-view">
+        <div class="isa-breadcrumbs">
+            <ul id="isa-breadcrumb-items">
+            </ul>
+        </div>
+        <div class="cf"></div>
+        <div id="study-info"></div>
+    </div>
+
+
+</div>
+
+<link href="ISATabViewer.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="js/handlebars-v1.3.0.js"></script>
 <script type="text/javascript" src="js/ISATabViewer.js"></script>
 <script type="text/javascript">
-    ISATabViewer.rendering.render_isatab_from_gist('2c606f6be7fc59ff196c', '#investigation_file', {})
+    //    BII-I-1 c3c4306af5916856c607
+    ISATabViewer.rendering.render_isatab_from_gist('c3c4306af5916856c607', '#investigation_file', {})
 </script>
+
+<script id="study-list-template" type="text/x-handlebars-template">
+
+    {{#each studies}}
+    <li id="list-{{thiss}}">
+        {{this}}
+    </li>
+    {{/each}}
+
+</script>
+
+<script id="study-template" type="text/x-handlebars-template">
+
+    <div id="study-title">{{study_title}}</div>
+    <div id="study-description">{{study_description}}</div>
+
+</script>
+
 </body>
 </html>

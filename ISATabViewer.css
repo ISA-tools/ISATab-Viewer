@@ -1,0 +1,114 @@
+/**
+ * For modern browsers
+ * 1. The space content is one way to avoid an Opera bug when the
+ *    contenteditable attribute is included anywhere else in the document.
+ *    Otherwise it causes space to appear at the top and bottom of elements
+ *    that are clearfixed.
+ * 2. The use of `table` rather than `block` is only necessary if using
+ *    `:before` to contain the top-margins of child elements.
+ */
+.cf:before,
+.cf:after {
+    content: " "; /* 1 */
+    display: table; /* 2 */
+}
+
+.cf:after {
+    clear: both;
+}
+
+/**
+ * For IE 6/7 only
+ * Include this rule to trigger hasLayout and contain floats.
+ */
+.cf {
+    *zoom: 1;
+}
+
+/**
+
+ISA-Tab Viewer CSS
+*/
+
+.isa-view {
+    font-family: "Helvetica Neue", Helvetica, sans-serif;
+    color: #35495E;
+    font-size: 12px;
+    width: 100%;
+    height: 100%;
+}
+
+.isa-study-list {
+    height: 100%;
+    width: 15%;
+    padding: 5px;
+    border-right: 1px solid #f1f2f1;
+    float: left;
+}
+
+.isa-study-list ul {
+    list-style: none;
+    -webkit-padding-start: 10px;
+}
+
+.isa-study-list li {
+    color: #26B99A;
+    font-size: 1.25em;
+    font-weight: bolder;
+}
+
+.isa-study-list h3 {
+    font-size: 1.4em;
+    font-weight: bolder;
+    text-transform: uppercase;
+}
+
+.isa-breadcrumbs ul {
+
+    list-style: none;
+    -webkit-padding-start: 10px;
+    font-size: 1.4em;
+    font-weight: bolder;
+    text-transform: uppercase;
+}
+
+.isa-breadcrumbs li {
+    float: left;
+    margin-left: 5px;
+    color: #26B99A;
+}
+
+.isa-breadcrumbs li.active {
+    color: #35495E;
+}
+
+.isa-main-view {
+    float: left;
+    width: 80%;
+    padding: 5px;
+}
+
+#study-info {
+    padding-left: 15px;
+    padding-top: 10px;
+}
+
+#study-id {
+    color: #26B99A;
+    font-size: 1.6em;
+    font-weight: bolder;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #f1f2f1;
+}
+
+#study-title {
+    font-size: 1.4em;
+    font-weight: bolder;
+}
+
+#study-description {
+    padding-top: 10px;
+    font-size: 1.2em;
+    font-weight: normal;
+
+}
