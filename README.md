@@ -13,6 +13,8 @@ If you put your ISA files on github as gists, you just need to supply the gist i
 	ISATabViewer.rendering.render_isatab_from_gist('2c606f6be7fc59ff196c', '#investigation_file');
 ```
 
+And this is the result! 
+
 ![image](https://isatools.files.wordpress.com/2014/06/localhost-63343-sharkkahuna-example-html.png?w=800)
 
 #Developers
