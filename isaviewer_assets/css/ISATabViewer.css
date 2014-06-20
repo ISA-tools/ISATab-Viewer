@@ -26,10 +26,21 @@
     *zoom: 1;
 }
 
+body {
+    margin: 0;
+}
 /**
 
 ISA-Tab Viewer CSS
 */
+
+.toolbar {
+    width: 100%;
+
+    padding: 15px;
+    background-color: #f1f2f1;
+
+}
 
 .isa-view {
     font-family: "Helvetica Neue", Helvetica, sans-serif;
@@ -125,17 +136,44 @@ ISA-Tab Viewer CSS
 
 }
 
+.characteristic_type {
+    font-weight: bolder;
+}
+
+.distribution {
+    float:left;
+    width: 70%;
+}
+.distribution-value {
+    float:right;
+    color: white;
+
+    width: 15%;
+}
+
+.distribution-value span {
+    text-align: center;
+    background-color: #26B99A;
+
+    font-weight: bolder;
+    padding: 4px 7px;
+}
+
 .section-header {
     color: #26B99A;
     font-weight: normal;
     font-size: 1.5em;
 }
 
-#publications ul, #assays ul {
+#publications ul, #assays ul, #sample-distribution ul{
     list-style: none;
     -webkit-padding-start: 0px;
     overflow: scroll;
     width: 100%;
+}
+
+#sample-stats {
+    height: 280px;
 }
 
 #protocols, #factors, #contacts {
@@ -150,10 +188,10 @@ ISA-Tab Viewer CSS
     width: 90%;
 }
 
-#publications ul li, #assays ul li {
+#publications ul li, #assays ul li, #sample-distribution ul li {
     float: left;
     margin-right: 10px;
-    font-size: .9em;
+    font-size: 1em;
     width: 270px;
 }
 
@@ -187,7 +225,7 @@ ISA-Tab Viewer CSS
     assay types
 */
 
-#assays, #publications {
+#assays, #publications, #samples {
     padding-bottom: 30px;
     padding-top: 30px;
     border-bottom: #f1f2f1 solid 1px;
@@ -241,6 +279,7 @@ ISA-Tab Viewer CSS
     width: 50px;
     cursor: pointer;
     margin: 0 auto;
+    text-decoration: none;
 }
 
 .btn-green {
@@ -253,7 +292,7 @@ ISA-Tab Viewer CSS
 }
 
 /*
-Table
+Table CSS is largely from Bootstrap 3 with some modifications.
 */
 
 table {

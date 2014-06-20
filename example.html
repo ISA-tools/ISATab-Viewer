@@ -7,6 +7,14 @@
 <body>
 
 <div id="investigation_file" class="isa-view">
+    <div class="toolbar">
+        Load ISA-Tab file to view <input type="text" name="gist" id="gist_id"><span class="btn btn-green"
+                                                                                    onclick="load_file()">Load File</span>
+
+        <div style="float: right; margin-right: 25px; margin-top: 3px" id="download-button">
+        </div>
+    </div>
+
     <div class="isa-study-list">
         <h3>Studies</h3>
         <ul id="study-list">
@@ -21,8 +29,6 @@
         <div class="cf"></div>
         <div id="study-info"></div>
     </div>
-
-
 </div>
 
 <link href="isaviewer_assets/css/ISATabViewer.css" rel="stylesheet" type="text/css"/>
@@ -55,16 +61,30 @@
         </thead>
         </tr>
         <tbody>
-            {{#each rows}}
-            <tr>
-                {{#each columns}}
-                <td>{{this}}</td>
-                {{/each}}
-            </tr>
+        {{#each rows}}
+        <tr>
+            {{#each columns}}
+            <td>{{this}}</td>
             {{/each}}
+        </tr>
+        {{/each}}
         </tbody>
     </table>
 
+</script>
+
+<script id="sample-distribution-template" type="text/x-handlebars-template">
+    <ul id="sample_stats">
+        {{#each sample_stats}}
+        <li>
+            <p class="characteristic_type">{{name}}</p>
+            {{#each distribution}}
+            <div class="distribution">{{name}}</div>
+            <div class="distribution-value"><span>{{value}}</span></div>
+            {{/each}}
+        </li>
+        {{/each}}
+    </ul>
 </script>
 
 <script id="study-template" type="text/x-handlebars-template">
@@ -74,6 +94,35 @@
 
     <div class="cf"></div>
     <br/>
+
+    <div id="samples">
+        <span class="section-header">Samples</span>
+
+        <div class="cf"></div>
+
+        <br/><br/>
+
+        <span class="btn btn-green" style="width:auto;"
+              onclick="ISATabViewer.rendering.render_assay('{{study_id}}','{{study_file}}')">
+            View Samples</span>
+
+        <br/>
+
+        <div id="sample-distribution">
+            <ul id="sample_stats">
+                {{#each sample_stats}}
+                <li>
+                    <p class="characteristic_type">{{name}}</p>
+                    {{#each distribution}}
+                    <div class="distribution">{{name}}</div>
+                    <div class="distribution-value"><span>{{value}}</span></div>
+                    {{/each}}
+                </li>
+                {{/each}}
+            </ul>
+        </div>
+
+    </div>
 
     <div id="assays">
         <span class="section-header">Assays</span>
@@ -159,6 +208,13 @@
         </ul>
     </div>
 
+</script>
+
+<script>
+    function load_file() {
+        var value = $("#gist_id").val();
+        ISATabViewer.rendering.render_isatab_from_gist(value, '#investigation_file', {})
+    }
 </script>
 
 </body>
