@@ -14,6 +14,10 @@ ISATabViewer.options = {
     splitter: "\t"  // for TSV or "," for CSV
 };
 
+ISATabViewer.spreadsheets = {
+    "files": {}
+};
+
 
 ISATabViewer.rendering = {
 
@@ -33,7 +37,9 @@ ISATabViewer.rendering = {
                     // we will be breaking things down in to investigation, study and assays. Then rendering everything at the end.
                     var xmlDoc = $.parseXML(file_data.div);
 
-                    if (file_data.files[0].indexOf('i_') != -1) {
+                    var filename = file_data.files[0];
+
+                    if (filename.indexOf('i_') != -1) {
                         // process investigation file
 
                         var divs = $(xmlDoc).find('div.line');
@@ -78,8 +84,28 @@ ISATabViewer.rendering = {
 
                         ISATabViewer.rendering.render_study_list(placement);
                     } else {
-                        // process study sample and assay files...
-                        // samples will have links to the assay created automatically. types will be preserved.
+
+                        ISATabViewer.spreadsheets.files[filename] = {"headers": [], "rows": []};
+                        var divs = $(xmlDoc).find('div.line');
+
+                        var count = 0;
+                        for (var div in divs) {
+                            if (divs[div].innerHTML) {
+                                var line_contents = divs[div].innerHTML.trim();
+                                parts = line_contents.split(ISATabViewer.options.splitter);
+                                var processed_parts = [];
+                                parts.forEach(function(part) {
+                                   processed_parts.push(ISATabViewer.rendering.replace_str("\"", "", part));
+                                });
+                                if (count == 0) {
+                                    // we have the headers
+                                    ISATabViewer.spreadsheets.files[filename]["headers"] = processed_parts;
+                                } else {
+                                    ISATabViewer.spreadsheets.files[filename]["rows"].push({"columns": processed_parts});
+                                }
+                                count++;
+                            }
+                        }
                     }
 
                 }
@@ -111,7 +137,10 @@ ISATabViewer.rendering = {
         });
 
         $("#list-" + study_id).addClass("active");
-    }, render_study: function (study_id) {
+    },
+
+
+    render_study: function (study_id) {
 
         this.set_active_list_item(study_id);
 
@@ -143,6 +172,19 @@ ISATabViewer.rendering = {
         $("#study-info").html(html);
     },
 
+    render_assay: function (study_id, file_name) {
+
+        $("#isa-breadcrumb-items").html('<li onclick="ISATabViewer.rendering.render_study(\'' + study_id + '\')">' + study_id + '</li><li class="active">' + file_name + '</li>');
+
+
+        var spreadsheet = ISATabViewer.spreadsheets.files[file_name];
+        var source = $("#table-template").html();
+        var template = Handlebars.compile(source);
+        var html = template(spreadsheet);
+
+        $("#study-info").html(html);
+    },
+
     /*
      This function adds in information about which images to use for example to show a particular type of assay.
      */
@@ -152,8 +194,6 @@ ISATabViewer.rendering = {
 
             var measurement_type = assay["Study Assay Measurement Type"];
 
-            console.log(measurement_type);
-
             assay.icon = measurement_type.indexOf("metabolite") >= 0 ? "assay-icon-metabolomics"
                 : measurement_type.indexOf("prote") >= 0 ? "assay-icon-proteomics"
                 : measurement_type.indexOf("transcript") >= 0 ? "assay-icon-transcriptomics"
@@ -161,7 +201,6 @@ ISATabViewer.rendering = {
                 : measurement_type.indexOf("genom") >= 0 ? "assay-icon-genomics"
                 : "";
 
-            console.log(assay.icon);
         }
     },
 
