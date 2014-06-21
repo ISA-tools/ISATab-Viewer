@@ -8,7 +8,7 @@ A web viewer for ISA-Tab files hosted as 'gists' on Github or on your own file s
 ###Examples
 
 
-#### Render from fileson your web server
+#### Render from files on your web server
 
 Example coming soon...
 
