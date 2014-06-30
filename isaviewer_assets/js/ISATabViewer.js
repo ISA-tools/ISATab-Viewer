@@ -26,6 +26,126 @@ ISATabViewer.rendering = {
      *
      */
 
+    process_file: function (file_name, file_contents, placement) {
+        var lines = file_contents.split("\n");
+
+        var current_section = "";
+        var current_study;
+
+        for (var line in lines) {
+            var __ret = ISATabViewer.rendering.process_investigation_file_line(lines[line], current_study, current_section);
+            current_study = __ret.current_study;
+            current_section = __ret.current_section;
+        }
+
+        if (current_study != undefined) ISATabViewer.investigation["STUDY"].push(current_study);
+        ISATabViewer.rendering.render_study_list(placement);
+
+        // TODO: Now we need to load the rest of the files. Study samples and assays in to the ISATabViewer.spreadsheets.files object
+
+        for (var study_index in ISATabViewer.investigation.STUDY) {
+            var study_information = ISATabViewer.investigation.STUDY[study_index];
+
+            var study_file = ISATabViewer.rendering.replace_str("\"", "", study_information.STUDY["Study File Name"][0]);
+
+            var base_directory = file_name.substr(0, file_name.lastIndexOf("/") + 1);
+
+            var assays = ISATabViewer.rendering.generate_records(study_information, "STUDY ASSAYS");
+
+            $.ajax({
+                url: base_directory + study_file,
+                success: function (study_file_contents) {
+                    ISATabViewer.spreadsheets.files[study_file] = {"headers": [], "rows": []};
+
+                    var lines = study_file_contents.split("\n");
+                    var count = 0;
+
+                    var position_to_characteristic = {};
+                    var characteristics = {};
+
+                    for (var line in lines) {
+
+                        var line_contents = lines[line].trim();
+                        parts = line_contents.split(ISATabViewer.options.splitter);
+                        var processed_parts = [];
+
+                        parts.forEach(function (part, index) {
+                            var column_value = ISATabViewer.rendering.replace_str("\"", "", part);
+                            processed_parts.push(column_value);
+
+                            // we store information about the characteristics of the samples (sample files begin with 's_')
+                            // to give an overview in the study info page
+
+                            if (count == 0 && column_value.indexOf("Characteristics") >= 0) {
+
+                                characteristics[column_value] = {};
+                                position_to_characteristic[index] = column_value;
+                            } else {
+                                if (index in position_to_characteristic) {
+                                    var characteristic_name = position_to_characteristic[index];
+
+                                    if (!(column_value in characteristics[characteristic_name])) {
+                                        characteristics[characteristic_name][column_value] = 0;
+                                    }
+                                    characteristics[characteristic_name][column_value]++;
+                                }
+                            }
+
+                        });
+                        if (count == 0) {
+                            // we have the headers
+                            ISATabViewer.spreadsheets.files[study_file]["headers"] = processed_parts;
+                        } else {
+                            ISATabViewer.spreadsheets.files[study_file]["rows"].push({"columns": processed_parts});
+                        }
+                        count++;
+                    }
+
+
+                    ISATabViewer.spreadsheets.files[study_file]["stats"] = characteristics;
+
+                    if ($('#sample-distribution').length) {
+                        var sample_stats = ISATabViewer.rendering.process_study_sample_statistics(characteristics);
+
+                        var source = $("#sample-distribution-template").html();
+                        var template = Handlebars.compile(source);
+                        var html = template({"sample_stats": sample_stats});
+                        $("#sample-distribution").html(html);
+                    }
+
+                }
+            });
+        }
+
+    },
+
+    process_investigation_file_line: function (line_contents, current_study, current_section) {
+        if (line_contents in ISATabViewer.investigation || (current_study != undefined && line_contents in current_study)) {
+            current_section = line_contents;
+            if (current_section == 'STUDY') {
+                if (current_study != undefined) ISATabViewer.investigation["STUDY"].push(current_study);
+                current_study = ISATabViewer.rendering.create_study_template();
+            }
+        } else {
+            var parts = line_contents.split(ISATabViewer.options.splitter);
+
+            if (parts.length > 0) {
+
+
+                if (current_study != undefined) {
+                    current_study[current_section][parts[0]] = $.grep(parts, function (v, i) {
+                        return v != "" && i != 0;
+                    });
+                } else {
+                    ISATabViewer.investigation[current_section][parts[0]] = $.grep(parts, function (v, i) {
+                        return v != "" && i != 0;
+                    });
+                }
+            }
+        }
+        return {current_study: current_study, current_section: current_section, parts: parts};
+    },
+
     process_gist: function (gist, gist_id, placement) {
 
         for (var file in gist.files) {
@@ -50,30 +170,9 @@ ISATabViewer.rendering = {
                         for (var div in divs) {
                             if (divs[div].innerHTML) {
                                 var line_contents = divs[div].innerHTML.trim();
-
-                                if (line_contents in ISATabViewer.investigation || (current_study != undefined && line_contents in current_study)) {
-                                    current_section = line_contents;
-                                    if (current_section == 'STUDY') {
-                                        if (current_study != undefined) ISATabViewer.investigation["STUDY"].push(current_study);
-                                        current_study = ISATabViewer.rendering.create_study_template();
-                                    }
-                                } else {
-                                    var parts = line_contents.split(ISATabViewer.options.splitter);
-
-                                    if (parts.length > 0) {
-
-
-                                        if (current_study != undefined) {
-                                            current_study[current_section][parts[0]] = $.grep(parts, function (v, i) {
-                                                return v != "" && i != 0;
-                                            });
-                                        } else {
-                                            ISATabViewer.investigation[current_section][parts[0]] = $.grep(parts, function (v, i) {
-                                                return v != "" && i != 0;
-                                            });
-                                        }
-                                    }
-                                }
+                                var __ret = ISATabViewer.rendering.process_investigation_file_line(line_contents, current_study, current_section);
+                                current_study = __ret.current_study;
+                                current_section = __ret.current_section;
                             }
                         }
 
@@ -82,8 +181,9 @@ ISATabViewer.rendering = {
                         ISATabViewer.rendering.render_study_list(placement);
                     } else {
 
-                        ISATabViewer.spreadsheets.files[filename] = {"headers": [], "rows": []};
                         var divs = $(xmlDoc).find('div.line');
+
+                        ISATabViewer.spreadsheets.files[filename] = {"headers": [], "rows": []};
 
                         var count = 0;
 
@@ -95,6 +195,7 @@ ISATabViewer.rendering = {
                                 var line_contents = divs[div].innerHTML.trim();
                                 parts = line_contents.split(ISATabViewer.options.splitter);
                                 var processed_parts = [];
+
                                 parts.forEach(function (part, index) {
                                     var column_value = ISATabViewer.rendering.replace_str("\"", "", part);
                                     processed_parts.push(column_value);
@@ -131,7 +232,7 @@ ISATabViewer.rendering = {
                         if (filename.indexOf("s_") != -1) {
                             ISATabViewer.spreadsheets.files[filename]["stats"] = characteristics;
 
-                            if ($('#sample-distribution').length){
+                            if ($('#sample-distribution').length) {
                                 var sample_stats = ISATabViewer.rendering.process_study_sample_statistics(characteristics);
 
                                 var source = $("#sample-distribution-template").html();
@@ -211,7 +312,7 @@ ISATabViewer.rendering = {
 
                 ISATabViewer.rendering.postprocess_assay_records(study.assays);
 
-                if(study.study_file in ISATabViewer.spreadsheets.files) {
+                if (study.study_file in ISATabViewer.spreadsheets.files) {
                     // we have already loaded the study sample file, so can load the distributions
 
                     study.sample_stats = ISATabViewer.spreadsheets.files[study.study_file]["stats"];
@@ -290,7 +391,19 @@ ISATabViewer.rendering = {
             success: function (gist) {
                 ISATabViewer.investigation.STUDY = [];
                 ISATabViewer.rendering.process_gist(gist, gist_id, placement)
-                $("#download-button").html('<a href="https://gist.github.com/' + gist_id +'/download" class="btn btn-green" style="width: 120px">Download this study.</span>');
+                $("#download-button").html('<a href="https://gist.github.com/' + gist_id + '/download" class="btn btn-green" style="width: 120px">Download this study.</span>');
+            }
+        });
+    },
+
+    render_isatab_from_file: function (investigation_file, placement, options) {
+
+        $.ajax({
+            url: investigation_file,
+            success: function (file) {
+                ISATabViewer.investigation.STUDY = [];
+                ISATabViewer.rendering.process_file(investigation_file, file, placement);
+//                $("#download-button").html('<a href="https://gist.github.com/' + gist_id +'/download" class="btn btn-green" style="width: 120px">Download this study.</span>');
             }
         });
     },

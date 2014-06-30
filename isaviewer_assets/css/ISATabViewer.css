@@ -153,7 +153,7 @@ ISA-Tab Viewer CSS
 
 .distribution-value span {
     text-align: center;
-    background-color: #26B99A;
+    color: #26B99A;
 
     font-weight: bolder;
     padding: 4px 7px;
@@ -172,8 +172,13 @@ ISA-Tab Viewer CSS
     width: 100%;
 }
 
-#sample-stats {
+#sample_stats {
     height: 280px;
+    overflow:scroll;
+}
+
+.distribution-group {
+    margin-bottom: 3px;
 }
 
 #protocols, #factors, #contacts {
