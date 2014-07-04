@@ -168,8 +168,8 @@ ISATabViewer.rendering = {
                         var current_study;
 
                         for (var div in divs) {
-                            if (divs[div].innerHTML) {
-                                var line_contents = divs[div].innerHTML.trim();
+                            if (divs[div].textContent) {
+                                var line_contents = divs[div].textContent.trim();
                                 var __ret = ISATabViewer.rendering.process_investigation_file_line(line_contents, current_study, current_section);
                                 current_study = __ret.current_study;
                                 current_section = __ret.current_section;
@@ -191,8 +191,8 @@ ISATabViewer.rendering = {
                         var characteristics = {};
 
                         for (var div in divs) {
-                            if (divs[div].innerHTML) {
-                                var line_contents = divs[div].innerHTML.trim();
+                            if (divs[div].textContent) {
+                                var line_contents = divs[div].textContent.trim();
                                 parts = line_contents.split(ISATabViewer.options.splitter);
                                 var processed_parts = [];
 
