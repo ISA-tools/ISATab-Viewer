@@ -1,7 +1,7 @@
 ISA-Tab Viewer
 ============
 
-![DOI](https://zenodo.org/badge/5364/ISA-tools/ISATab-Viewer.png)](http://dx.doi.org/10.5281/zenodo.11084)
+<a href="http://dx.doi.org/10.5281/zenodo.11084"><img src="https://zenodo.org/badge/5364/ISA-tools/ISATab-Viewer.png"><a>
 
 A web viewer for ISA-Tab files hosted as 'gists' on Github or on your own file system. Gone are the days of only using ISAcreator.
 
