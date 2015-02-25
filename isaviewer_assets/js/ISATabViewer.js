@@ -18,6 +18,9 @@ ISATabViewer.spreadsheets = {
     "files": {}
 };
 
+hashCode = function(s){
+  return s.split("").reduce(function(a,b){a=((a<<5)-a)+b.charCodeAt(0);return a&a},0);
+}
 
 ISATabViewer.rendering = {
 
@@ -34,20 +37,23 @@ ISATabViewer.rendering = {
 
         for (var line in lines) {
             var __ret = ISATabViewer.rendering.process_investigation_file_line(lines[line], current_study, current_section);
-            current_study = __ret.current_study;
-            current_section = __ret.current_section;
+            if (__ret != undefined) {
+                current_study = __ret.current_study;
+                current_section = __ret.current_section;
+            }
         }
 
-        if (current_study != undefined) ISATabViewer.investigation["STUDY"].push(current_study);
+        if (current_study != undefined)
+            ISATabViewer.investigation["STUDY"].push(current_study);
         ISATabViewer.rendering.render_study_list(placement);
 
         // TODO: Now we need to load the rest of the files. Study samples and assays in to the ISATabViewer.spreadsheets.files object
 
+
         for (var study_index in ISATabViewer.investigation.STUDY) {
+
             var study_information = ISATabViewer.investigation.STUDY[study_index];
-
             var study_file = ISATabViewer.rendering.replace_str("\"", "", study_information.STUDY["Study File Name"][0]);
-
             var base_directory = file_name.substr(0, file_name.lastIndexOf("/") + 1);
 
             var assays = ISATabViewer.rendering.generate_records(study_information, "STUDY ASSAYS");
@@ -120,6 +126,8 @@ ISATabViewer.rendering = {
     },
 
     process_investigation_file_line: function (line_contents, current_study, current_section) {
+        if (line_contents.lastIndexOf("#", 0) === 0)
+            return;
         if (line_contents in ISATabViewer.investigation || (current_study != undefined && line_contents in current_study)) {
             current_section = line_contents;
             if (current_section == 'STUDY') {
@@ -253,7 +261,8 @@ ISATabViewer.rendering = {
         var studies = [];
 
         for (var study_index in ISATabViewer.investigation.STUDY) {
-            studies.push(ISATabViewer.rendering.replace_str("\"", "", ISATabViewer.investigation.STUDY[study_index].STUDY["Study Identifier"][0]));
+
+            studies.push(hashCode(ISATabViewer.rendering.replace_str("\"", "", ISATabViewer.investigation.STUDY[study_index].STUDY["Study Identifier"][0])));
         }
 
         $("#isa-breadcrumb-items").html('<li class="active">' + studies[0] + '</li>');
@@ -267,6 +276,7 @@ ISATabViewer.rendering = {
     },
 
     set_active_list_item: function (study_id) {
+        console.log(study_id);
         $("#study-list").find("li").each(function () {
             $(this).removeClass("active");
         });
@@ -288,13 +298,15 @@ ISATabViewer.rendering = {
         return study_sample_stats
     },
 
-    render_study: function (study_id) {
 
+    render_study: function (study_id) {
+        console.log(study_id);
         this.set_active_list_item(study_id);
 
         $("#isa-breadcrumb-items").html('<li class="active">' + study_id + '</li>');
         var study = {};
         for (var study_index in ISATabViewer.investigation.STUDY) {
+            
             var study_information = ISATabViewer.investigation.STUDY[study_index];
 
             if (study_information.STUDY["Study Identifier"][0].indexOf(study_id) != -1) {
