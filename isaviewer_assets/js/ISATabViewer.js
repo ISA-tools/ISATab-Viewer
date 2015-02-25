@@ -307,17 +307,17 @@ ISATabViewer.rendering = {
     },
 
 
-    render_study: function (study_id) {
-        console.log(study_id);
-        this.set_active_list_item(study_id);
+    render_study: function (study_id_hash) {
+        console.log(study_id_hash);
+        this.set_active_list_item(study_id_hash);
 
-        $("#isa-breadcrumb-items").html('<li class="active">' + study_id + '</li>');
+        $("#isa-breadcrumb-items").html('<li class="active">' + study_id_hash + '</li>');
         var study = {};
         for (var study_index in ISATabViewer.investigation.STUDY) {
 
             var study_information = ISATabViewer.investigation.STUDY[study_index];
 
-            if (study_information.STUDY["Study Identifier"][0].indexOf(study_id) != -1) {
+            if (study_information.STUDY["Study Identifier"][0].indexOf(study_id_hash) != -1) {
                 study.study_id = ISATabViewer.rendering.replace_str("\"", "", study_information.STUDY["Study Identifier"][0]);
                 study.study_title = ISATabViewer.rendering.replace_str("\"", "", study_information.STUDY["Study Title"][0]);
                 study.study_description = ISATabViewer.rendering.replace_str("\"", "", study_information.STUDY["Study Description"][0]);
