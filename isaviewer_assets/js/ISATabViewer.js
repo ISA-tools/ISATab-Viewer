@@ -4,11 +4,13 @@
 
 var ISATabViewer = {};
 
-ISATabViewer.investigation = {"ONTOLOGY SOURCE REFERENCE": {},
+ISATabViewer.investigation = {
+    "ONTOLOGY SOURCE REFERENCE": {},
     "INVESTIGATION": {},
     "INVESTIGATION CONTACTS": {},
     "INVESTIGATION PUBLICATIONS": {},
-    "STUDY": []};
+    "STUDY": []
+};
 
 ISATabViewer.options = {
     splitter: "\t"  // for TSV or "," for CSV
@@ -18,8 +20,11 @@ ISATabViewer.spreadsheets = {
     "files": {}
 };
 
-hashCode = function(s){
-  return s.split("").reduce(function(a,b){a=((a<<5)-a)+b.charCodeAt(0);return a&a},0);
+hashCode = function (s) {
+    return s.split("").reduce(function (a, b) {
+        a = ((a << 5) - a) + b.charCodeAt(0);
+        return a & a
+    }, 0);
 }
 
 ISATabViewer.rendering = {
@@ -261,8 +266,8 @@ ISATabViewer.rendering = {
         var studies = [];
 
         for (var study_index in ISATabViewer.investigation.STUDY) {
-
-            studies.push(hashCode(ISATabViewer.rendering.replace_str("\"", "", ISATabViewer.investigation.STUDY[study_index].STUDY["Study Identifier"][0])));
+            var study_id = ISATabViewer.rendering.replace_str("\"", "", ISATabViewer.investigation.STUDY[study_index].STUDY["Study Identifier"][0]);
+            studies.push({"hash":hashCode(study_id), "id":study_id})
         }
 
         $("#isa-breadcrumb-items").html('<li class="active">' + studies[0] + '</li>');
@@ -272,7 +277,7 @@ ISATabViewer.rendering = {
         var html = template({"studies": studies});
         $("#study-list").html(html);
 
-        ISATabViewer.rendering.render_study(studies[0]);
+        ISATabViewer.rendering.render_study(studies[0].id);
     },
 
     set_active_list_item: function (study_id) {
@@ -291,7 +296,10 @@ ISATabViewer.rendering = {
             var record = {"name": characteristic_name, "distribution": []};
 
             for (var distribution_item in stats[characteristic_name]) {
-                record["distribution"].push({"name": distribution_item, "value": stats[characteristic_name][distribution_item]})
+                record["distribution"].push({
+                    "name": distribution_item,
+                    "value": stats[characteristic_name][distribution_item]
+                })
             }
             study_sample_stats.push(record);
         }
@@ -306,7 +314,7 @@ ISATabViewer.rendering = {
         $("#isa-breadcrumb-items").html('<li class="active">' + study_id + '</li>');
         var study = {};
         for (var study_index in ISATabViewer.investigation.STUDY) {
-            
+
             var study_information = ISATabViewer.investigation.STUDY[study_index];
 
             if (study_information.STUDY["Study Identifier"][0].indexOf(study_id) != -1) {

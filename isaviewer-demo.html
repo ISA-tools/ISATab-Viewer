@@ -44,8 +44,8 @@
 <script id="study-list-template" type="text/x-handlebars-template">
 
     {{#each studies}}
-    <li id="list-{{this}}" onclick="ISATabViewer.rendering.render_study('{{this}}')">
-        {{this}}
+    <li id="list-{{this.hash}}" onclick="ISATabViewer.rendering.render_study('{{this.id}}')">
+        {{this.id}}
     </li>
     {{/each}}
 
