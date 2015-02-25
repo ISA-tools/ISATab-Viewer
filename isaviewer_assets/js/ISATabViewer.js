@@ -277,7 +277,7 @@ ISATabViewer.rendering = {
         var html = template({"studies": studies});
         $("#study-list").html(html);
 
-        ISATabViewer.rendering.render_study(studies[0].id);
+        ISATabViewer.rendering.render_study(studies[0].hash);
     },
 
     set_active_list_item: function (study_id) {
