@@ -280,13 +280,13 @@ ISATabViewer.rendering = {
         ISATabViewer.rendering.render_study(studies[0].hash);
     },
 
-    set_active_list_item: function (study_id) {
-        console.log(study_id);
+    set_active_list_item: function (study_id_hash) {
+
         $("#study-list").find("li").each(function () {
             $(this).removeClass("active");
         });
 
-        $("#list-" + study_id).addClass("active");
+        $("#list-" + study_id_hash).addClass("active");
     },
 
 
@@ -307,11 +307,11 @@ ISATabViewer.rendering = {
     },
 
 
-    render_study: function (study_id_hash) {
-        console.log(study_id_hash);
+    render_study: function (study_id_hash, study_id) {
+        console.log("render_study  "+study_id_hash+"  "+study_id);
         this.set_active_list_item(study_id_hash);
 
-        $("#isa-breadcrumb-items").html('<li class="active">' + study_id_hash + '</li>');
+        $("#isa-breadcrumb-items").html('<li class="active">' + study_id+ '</li>');
         var study = {};
         for (var study_index in ISATabViewer.investigation.STUDY) {
 
@@ -350,9 +350,9 @@ ISATabViewer.rendering = {
         $("#study-info").html(html);
     },
 
-    render_assay: function (study_id, file_name) {
+    render_assay: function (study_id_hash, study_id, file_name) {
 
-        $("#isa-breadcrumb-items").html('<li onclick="ISATabViewer.rendering.render_study(\'' + study_id + '\')">' + study_id + '</li><li class="active">' + file_name + '</li>');
+        $("#isa-breadcrumb-items").html('<li onclick="ISATabViewer.rendering.render_study(\'' + study_id_hash + '\')">' + study_id + '</li><li class="active">' + file_name + '</li>');
 
 
         var spreadsheet = ISATabViewer.spreadsheets.files[file_name];
