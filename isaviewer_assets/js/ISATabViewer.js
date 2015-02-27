@@ -62,7 +62,7 @@ ISATabViewer.rendering = {
             var base_directory = file_name.substr(0, file_name.lastIndexOf("/") + 1);
 
             var assays = ISATabViewer.rendering.generate_records(study_information, "STUDY ASSAYS");
-
+            console.log(assays);
             $.ajax({
                 url: base_directory + study_file,
                 success: function (study_file_contents) {
@@ -315,6 +315,7 @@ ISATabViewer.rendering = {
         var study = {};
         for (var study_index in ISATabViewer.investigation.STUDY) {
 
+
             var study_information = ISATabViewer.investigation.STUDY[study_index];
 
             if (study_information.STUDY["Study Identifier"][0].indexOf(study_id_hash) != -1) {
@@ -342,6 +343,7 @@ ISATabViewer.rendering = {
                 }
             }
         }
+        console.log(study);
 
         var source = $("#study-template").html();
         var template = Handlebars.compile(source);
@@ -350,11 +352,14 @@ ISATabViewer.rendering = {
         $("#study-info").html(html);
     },
 
-    render_assay: function (study_id_hash, study_id, file_name) {
+    render_assay: function (study_id, file_name) {
 
-        $("#isa-breadcrumb-items").html('<li onclick="ISATabViewer.rendering.render_study(\'' + study_id_hash + '\')">' + study_id + '</li><li class="active">' + file_name + '</li>');
+        console.log("Rendering assay");
+        console.log(study_id);
+        console.log(file_name);
+        $("#isa-breadcrumb-items").html('<li onclick="ISATabViewer.rendering.render_study(\'' + study_id + '\')">' + study_id + '</li><li class="active">' + file_name + '</li>');
 
-
+        console.log(ISATabViewer.spreadsheets.files);
         var spreadsheet = ISATabViewer.spreadsheets.files[file_name];
         var source = $("#table-template").html();
         var template = Handlebars.compile(source);
