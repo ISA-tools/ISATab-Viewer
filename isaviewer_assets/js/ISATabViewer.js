@@ -66,57 +66,13 @@ ISATabViewer.rendering = {
             $.ajax({
                 url: base_directory + study_file,
                 success: function (study_file_contents) {
-                    ISATabViewer.spreadsheets.files[study_file] = {"headers": [], "rows": []};
 
-                    var lines = study_file_contents.split("\n");
-                    var count = 0;
+                    var processed_characteristics = ISATabViewer.rendering.process_assay_file(study_file, study_file_contents);
 
-                    var position_to_characteristic = {};
-                    var characteristics = {};
-
-                    for (var line in lines) {
-
-                        var line_contents = lines[line].trim();
-                        parts = line_contents.split(ISATabViewer.options.splitter);
-                        var processed_parts = [];
-
-                        parts.forEach(function (part, index) {
-                            var column_value = ISATabViewer.rendering.replace_str("\"", "", part);
-                            processed_parts.push(column_value);
-
-                            // we store information about the characteristics of the samples (sample files begin with 's_')
-                            // to give an overview in the study info page
-
-                            if (count == 0 && column_value.indexOf("Characteristics") >= 0) {
-
-                                characteristics[column_value] = {};
-                                position_to_characteristic[index] = column_value;
-                            } else {
-                                if (index in position_to_characteristic) {
-                                    var characteristic_name = position_to_characteristic[index];
-
-                                    if (!(column_value in characteristics[characteristic_name])) {
-                                        characteristics[characteristic_name][column_value] = 0;
-                                    }
-                                    characteristics[characteristic_name][column_value]++;
-                                }
-                            }
-
-                        });
-                        if (count == 0) {
-                            // we have the headers
-                            ISATabViewer.spreadsheets.files[study_file]["headers"] = processed_parts;
-                        } else {
-                            ISATabViewer.spreadsheets.files[study_file]["rows"].push({"columns": processed_parts});
-                        }
-                        count++;
-                    }
-
-
-                    ISATabViewer.spreadsheets.files[study_file]["stats"] = characteristics;
+                    ISATabViewer.spreadsheets.files[study_file]["stats"] = processed_characteristics;
 
                     if ($('#sample-distribution').length) {
-                        var sample_stats = ISATabViewer.rendering.process_study_sample_statistics(characteristics);
+                        var sample_stats = ISATabViewer.rendering.process_study_sample_statistics(processed_characteristics);
 
                         var source = $("#sample-distribution-template").html();
                         var template = Handlebars.compile(source);
@@ -129,6 +85,58 @@ ISATabViewer.rendering = {
         }
 
     },
+
+
+    process_assay_file: function(file_name, file_contents) {
+        ISATabViewer.spreadsheets.files[file_name] = {"headers": [], "rows": []};
+
+        var lines = file_contents.split("\n");
+        var count = 0;
+
+        var position_to_characteristic = {};
+        var characteristics = {};
+
+        for (var line in lines) {
+
+            var line_contents = lines[line].trim();
+            var parts = line_contents.split(ISATabViewer.options.splitter);
+            var processed_parts = [];
+
+            parts.forEach(function (part, index) {
+                var column_value = ISATabViewer.rendering.replace_str("\"", "", part);
+                processed_parts.push(column_value);
+
+                // we store information about the characteristics of the samples (sample files begin with 's_')
+                // to give an overview in the study info page
+
+                if (count == 0 && column_value.indexOf("Characteristics") >= 0) {
+
+                    characteristics[column_value] = {};
+                    position_to_characteristic[index] = column_value;
+                } else {
+                    if (index in position_to_characteristic) {
+                        var characteristic_name = position_to_characteristic[index];
+
+                        if (!(column_value in characteristics[characteristic_name])) {
+                            characteristics[characteristic_name][column_value] = 0;
+                        }
+                        characteristics[characteristic_name][column_value]++;
+                    }
+                }
+
+            });
+            if (count == 0) {
+                // we have the headers
+                ISATabViewer.spreadsheets.files[file_name]["headers"] = processed_parts;
+            } else {
+                ISATabViewer.spreadsheets.files[file_name]["rows"].push({"columns": processed_parts});
+            }
+            count++;
+        }
+
+        return characteristics;
+    },
+
 
     process_investigation_file_line: function (line_contents, current_study, current_section) {
         if (line_contents.lastIndexOf("#", 0) === 0)
