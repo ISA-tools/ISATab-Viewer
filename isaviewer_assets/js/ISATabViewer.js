@@ -66,7 +66,8 @@ ISATabViewer.rendering = {
             $.ajax({
                 url: base_directory + study_file,
                 success: function (study_file_contents) {
-
+                    console.log("This is the original URL");
+                    console.log(this.url);
                     var processed_characteristics = ISATabViewer.rendering.process_assay_file(study_file, study_file_contents);
 
                     ISATabViewer.spreadsheets.files[study_file]["stats"] = processed_characteristics;
@@ -79,9 +80,20 @@ ISATabViewer.rendering = {
                         var html = template({"sample_stats": sample_stats});
                         $("#sample-distribution").html(html);
                     }
-
                 }
             });
+
+            for (var assay in assays) {
+                console.log(assays[assay]);
+                $.ajax({
+                    url: base_directory + assays[assay]["Study Assay File Name"],
+                    success: function(file_contents) {
+                        var original_file_name = ISATabViewer.rendering.replace_str(base_directory, "", this.url);
+                        console.log(original_file_name);
+                        ISATabViewer.rendering.process_assay_file(original_file_name, file_contents);
+                    }
+                });
+            }
         }
 
     },
