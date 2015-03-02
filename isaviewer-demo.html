@@ -7,6 +7,8 @@
 <body>
 
 <div id="investigation_file" class="isa-view">
+
+    <!-- Load from gist -->
     <div class="toolbar">
         Load ISA-Tab file to view <input type="text" name="gist" id="gist_id"><span class="btn btn-green"
                                                                                     onclick="load_file()">Load File</span>
@@ -14,9 +16,10 @@
         <div style="float: right; margin-right: 25px; margin-top: 3px" id="download-button">
         </div>
     </div>
+    <!-- end of load from gist -->
 
     <div class="isa-study-list">
-        <h3>Studies</h3>
+        <h3>ISA-Tab files</h3>
         <ul id="study-list">
         </ul>
     </div>
@@ -36,17 +39,26 @@
 <script type="text/javascript" src="isaviewer_assets/js/handlebars-v1.3.0.js"></script>
 <script type="text/javascript" src="isaviewer_assets/js/ISATabViewer.js"></script>
 <script type="text/javascript">
-//        ISATabViewer.rendering.render_isatab_from_gist('c3c4306af5916856c607', '#investigation_file', {});
-    ISATabViewer.rendering.render_isatab_from_file('test_data_sets/BII-S-3/i_gilbert.txt', '#investigation_file', {});
+     //ISATabViewer.rendering.render_isatab_from_gist('c3c4306af5916856c607', '#investigation_file', {});
+ ISATabViewer.rendering.render_isatab_from_file('test_data_sets/BII-S-3/i_gilbert.txt', '#investigation_file', {});
+ //ISATabViewer.rendering.render_isatab_from_file('test_data_sets/BII-I-1/i_investigation.txt', '#investigation_file', {});
 </script>
 
 <script id="study-list-template" type="text/x-handlebars-template">
 
-    {{#each studies}}
-    <li id="list-{{this.hash}}" onclick="ISATabViewer.rendering.render_study('{{this.id}}', '{{this.hash}}')">
+    <dl>
         {{this.id}}
-    </li>
-    {{/each}}
+        <dt>
+            <h4 onclick="ISATabViewer.rendering.render_investigation()">Investigation</h4>
+        </dt>
+        <dd>
+        {{#each studies}}
+        &nbsp;<li id="list-{{this.hash}}" onclick="ISATabViewer.rendering.render_study('{{this.id}}', '{{this.hash}}')">
+        {{this.id}}
+        </li>
+        {{/each}}
+        </dd>
+    </dl>
 
 </script>
 
@@ -91,6 +103,47 @@
     </ul>
 </script>
 
+<script id="investigation-template" type="text/x-handlebars-template">
+
+    <div id="investigation-title">{{investigation_title}}</div>
+    <div id="investigation-description">{{investigation_description}}</div>
+
+    <div id="investigation-contacts">
+
+        <span class="section-header">Contacts</span>
+        <ul>
+            {{#each contacts}}
+            <li>
+                <p class="investigation-contact">{{[Investigation Person First Name]}} {{[Investigation Person Last Name]}}</p>
+
+                <p class="investigation-contact-address">{{[Investigation Person Address]}}</p>
+
+                <p class="investigation-contact-affiliation">{{[Investigation Person Affiliation]}}</span></p>
+            </li>
+            {{/each}}
+        </ul>
+    </div>
+
+    <div id="investigation-publications">
+
+        <span class="section-header">Publications</span>
+        <ul>
+            {{#each publications}}
+            <li>
+                <p class="publication-title">{{[Investigation Publication Title]}}</p>
+
+                <p class="publication-authors">{{[Investigation Publication Author List]}}</p>
+
+                <p class="publication-pubmedid">Pubmed ID <span style="color:#26B99A">{{[Investigation PubMed ID]}}</span></p>
+
+                <p class="publication-doi">DOI <span style="color:#26B99A">{{[Investigation Publication DOI]}}</span></p>
+            </li>
+            {{/each}}
+        </ul>
+    </div>
+
+</script>
+
 <script id="study-template" type="text/x-handlebars-template">
 
     <div id="study-title">{{study_title}}</div>
@@ -107,7 +160,7 @@
         <br/><br/>
 
         <span class="btn btn-green" style="width:auto;"
-              onclick="ISATabViewer.rendering.render_assay('{{study_id}}','{{study_file}}')">
+              onclick="ISATabViewer.rendering.render_assay('{{study_id}}','{{study_id_hash}}','{{study_file}}')">
             View Samples</span>
 
         <br/>
@@ -146,7 +199,7 @@
                 <p class="assay-file-name">{{[Study Assay File Name]}}</p>
 
                 <p class="btn btn-green"
-                   onclick="ISATabViewer.rendering.render_assay('{{../study_id}}','{{[Study Assay File Name]}}')">
+                   onclick="ISATabViewer.rendering.render_assay('{{../study_id}}','{{../study_id_hash}}','{{[Study Assay File Name]}}')">
                     View</p>
             </li>
             {{/each}}

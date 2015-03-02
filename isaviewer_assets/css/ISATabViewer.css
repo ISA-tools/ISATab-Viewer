@@ -79,6 +79,18 @@ ISA-Tab Viewer CSS
     text-transform: uppercase;
 }
 
+.isa-study-list dl {
+    color: #35495E;
+    font-size: 1.25em;
+    font-weight: bolder;
+    cursor: pointer;
+}
+
+.isa-study-list dl:hover, .isa-study-list li.active {
+    color: #26B99A;
+}
+
+
 .isa-breadcrumbs ul {
 
     list-style: none;
@@ -129,7 +141,20 @@ ISA-Tab Viewer CSS
     font-weight: bolder;
 }
 
+#investigation-title {
+    font-size: 1.4em;
+    font-weight: bolder;
+}
+
+
 #study-description {
+    padding-top: 10px;
+    font-size: 1.2em;
+    font-weight: normal;
+
+}
+
+#investigation-description {
     padding-top: 10px;
     font-size: 1.2em;
     font-weight: normal;
