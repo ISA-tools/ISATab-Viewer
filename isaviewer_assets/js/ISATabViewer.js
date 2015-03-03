@@ -433,7 +433,7 @@ ISATabViewer.rendering = {
                 study.study_file = ISATabViewer.rendering.replace_str("\"", "", study_information.STUDY["Study File Name"][0]);
 
                 var data_files = [];
-                
+
                 if (study_information.STUDY["Comment[Data Repository]"][0]) {
                     study.data_repositories = study_information.STUDY["Comment[Data Repository]"][0].split(";");
                     study.data_record_accessions = study_information.STUDY["Comment[Data Record Accession]"][0].split(";");
@@ -450,8 +450,10 @@ ISATabViewer.rendering = {
                 }
 
                 study.data_files = data_files;
-                console.log("data files");
-                console.log(data_files);
+
+                if (study_information.STUDY["Comment[Subject Keywords]"][0]) {
+                    study.keywords = study_information.STUDY["Comment[Subject Keywords]"][0].split(";");
+                }
 
                 study.publications = ISATabViewer.rendering.generate_records(study_information, "STUDY PUBLICATIONS");
                 study.protocols = ISATabViewer.rendering.generate_records(study_information, "STUDY PROTOCOLS");
