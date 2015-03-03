@@ -103,7 +103,7 @@ ISATabViewer.rendering = {
                 });
             }
         }
-
+        return ISATabViewer.investigation;
     },
 
 
@@ -413,6 +413,9 @@ ISATabViewer.rendering = {
      * @param study_id_hash
      */
     render_study: function (study_id, study_id_hash) {
+        console.log("render_study");
+        console.log(study_id);
+        console.log(study_id_hash);
         if (ISATabViewer.rendering.is_empty_investigation())
             this.set_active_list_item(study_id_hash);
 
@@ -528,13 +531,16 @@ ISATabViewer.rendering = {
         });
     },
 
-    render_isatab_from_file: function (investigation_file, placement, options) {
+    render_isatab_from_file: function (investigation_file, placement, options, invCallBack) {
 
         $.ajax({
             url: investigation_file,
+            //async: false,
             success: function (file) {
+                var investigation;
                 ISATabViewer.investigation.STUDY = [];
-                ISATabViewer.rendering.process_file(investigation_file, file, placement);
+                investigation = ISATabViewer.rendering.process_file(investigation_file, file, placement);
+                invCallBack(investigation);
             }
         });
     },
