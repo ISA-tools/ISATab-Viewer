@@ -40,20 +40,20 @@
 <script type="text/javascript" src="isaviewer_assets/js/ISATabViewer.js"></script>
 <script type="text/javascript">
      //ISATabViewer.rendering.render_isatab_from_gist('c3c4306af5916856c607', '#investigation_file', {});
- ISATabViewer.rendering.render_isatab_from_file('test_data_sets/BII-S-3/i_gilbert.txt', '#investigation_file', {});
- //ISATabViewer.rendering.render_isatab_from_file('test_data_sets/BII-I-1/i_investigation.txt', '#investigation_file', {});
+ //ISATabViewer.rendering.render_isatab_from_file('test_data_sets/BII-S-3/i_gilbert.txt', '#investigation_file', {});
+ ISATabViewer.rendering.render_isatab_from_file('test_data_sets/BII-I-1/i_investigation.txt', '#investigation_file', {});
 </script>
 
 <script id="study-list-template" type="text/x-handlebars-template">
 
     <dl>
-        {{this.id}}
-        <dt>
-            <h4 onclick="ISATabViewer.rendering.render_investigation()">Investigation</h4>
+       <!-- <dt>
+            <h4 onclick="ISATabViewer.rendering.render_investigation()">Investigation {{this.investigation_id}}</h4>
         </dt>
         <dd>
+        -->
         {{#each studies}}
-        &nbsp;<li id="list-{{this.hash}}" onclick="ISATabViewer.rendering.render_study('{{this.id}}', '{{this.hash}}')">
+        <li id="list-{{this.hash}}" onclick="ISATabViewer.rendering.render_study('{{this.id}}', '{{this.hash}}')">
         {{this.id}}
         </li>
         {{/each}}
@@ -107,6 +107,9 @@
 
     <div id="investigation-title">{{investigation_title}}</div>
     <div id="investigation-description">{{investigation_description}}</div>
+
+    <div class="cf"></div>
+    <br/>
 
     <div id="investigation-contacts">
 
