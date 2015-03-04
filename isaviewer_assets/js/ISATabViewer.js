@@ -42,11 +42,12 @@ ISATabViewer.rendering = {
      * @param placement
      */
     process_file: function (file_name, file_contents, placement) {
-        var lines = file_contents.split("\n");
+        var lines = file_contents.split(/\r\n|\r|\n/g);
         var current_section = "";
         var current_study;
 
         for (var line in lines) {
+            //console.log(line +":"+ lines[line]);
             var __ret = ISATabViewer.rendering.process_investigation_file_line(lines[line], current_study, current_section);
             if (__ret != undefined) {
                 current_study = __ret.current_study;
@@ -114,11 +115,12 @@ ISATabViewer.rendering = {
      * @returns {{current_study: *, current_section: *, parts: Array}}
      */
     process_investigation_file_line: function (line_contents, current_study, current_section) {
-
         //ignore lines starting with #
-        if (line_contents.lastIndexOf("#", 0) === 0)
+        if (line_contents.lastIndexOf("#", 0) === 0) {
             return;
+        }
 
+        //TODO: check line_contents in ISATabViewer.investigation in Chrome
         if (line_contents in ISATabViewer.investigation || (current_study != undefined && line_contents in current_study)) {
 
             current_section = line_contents;
@@ -412,9 +414,7 @@ ISATabViewer.rendering = {
      * @param study_id_hash
      */
     render_study: function (study_id, study_id_hash) {
-        console.log("render_study");
-        console.log(study_id);
-        console.log(study_id_hash);
+
         if (ISATabViewer.rendering.is_empty_investigation())
             this.set_active_list_item(study_id_hash);
 
