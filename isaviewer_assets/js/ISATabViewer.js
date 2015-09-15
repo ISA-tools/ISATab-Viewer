@@ -434,24 +434,24 @@ ISATabViewer.rendering = {
 
                 var data_files = [];
 
-                if (study_information.STUDY["Comment[Data Repository]"][0]) {
+                if (typeof study_information.STUDY["Comment[Data Repository]"] !== 'undefined' && study_information.STUDY["Comment[Data Repository]"].length >0) {
                     study.data_repositories = study_information.STUDY["Comment[Data Repository]"][0].split(";");
                     study.data_record_accessions = study_information.STUDY["Comment[Data Record Accession]"][0].split(";");
                     study.data_record_uris = study_information.STUDY["Comment[Data Record URI]"][0].split(";");
-                }
 
-                for (var i = 0; i < study.data_repositories.length; i++) {
-                    if (data_files[i] == undefined) {
-                        data_files[i] = {}
+                    for (var i = 0; i < study.data_repositories.length; i++) {
+                        if (data_files[i] == undefined) {
+                            data_files[i] = {}
+                        }
+                        data_files[i].data_repository = study.data_repositories[i];
+                        data_files[i].data_record_accession = study.data_record_accessions[i];
+                        data_files[i].data_record_uri = study.data_record_uris[i];
                     }
-                    data_files[i].data_repository = study.data_repositories[i];
-                    data_files[i].data_record_accession = study.data_record_accessions[i];
-                    data_files[i].data_record_uri = study.data_record_uris[i];
+
+                    study.data_files = data_files;
                 }
 
-                study.data_files = data_files;
-
-                if (study_information.STUDY["Comment[Subject Keywords]"][0]) {
+                if (typeof study_information.STUDY["Comment[Subject Keywords]"] != 'undefined' && study_information.STUDY["Comment[Subject Keywords]"].length > 0) {
                     study.keywords = study_information.STUDY["Comment[Subject Keywords]"][0].split(";");
                 }
 
