@@ -42,13 +42,12 @@ ISATabViewer.rendering = {
      * @param placement
      */
     process_file: function (file_name, file_contents, placement) {
-        var lines = file_contents.split("\n");
-
+        var lines = file_contents.split(/\r\n|\r|\n/g);
         var current_section = "";
         var current_study;
 
-
         for (var line in lines) {
+            //console.log(line +":"+ lines[line]);
             var __ret = ISATabViewer.rendering.process_investigation_file_line(lines[line], current_study, current_section);
             if (__ret != undefined) {
                 current_study = __ret.current_study;
@@ -103,7 +102,7 @@ ISATabViewer.rendering = {
                 });
             }
         }
-
+        return ISATabViewer.investigation;
     },
 
 
@@ -117,9 +116,11 @@ ISATabViewer.rendering = {
      */
     process_investigation_file_line: function (line_contents, current_study, current_section) {
         //ignore lines starting with #
-        if (line_contents.lastIndexOf("#", 0) === 0)
+        if (line_contents.lastIndexOf("#", 0) === 0) {
             return;
+        }
 
+        //TODO: check line_contents in ISATabViewer.investigation in Chrome
         if (line_contents in ISATabViewer.investigation || (current_study != undefined && line_contents in current_study)) {
 
             current_section = line_contents;
@@ -327,7 +328,8 @@ ISATabViewer.rendering = {
 
         for (var study_index in ISATabViewer.investigation.STUDY) {
             var study_id = ISATabViewer.rendering.replace_str("\"", "", ISATabViewer.investigation.STUDY[study_index].STUDY["Study Identifier"][0]);
-            studies.push({"hash":hashCode(study_id), "id":study_id, "title": ISATabViewer.investigation.STUDY[study_index].STUDY["Study Title"][0]})
+            var study_title = ISATabViewer.rendering.replace_str("\"", "", ISATabViewer.investigation.STUDY[study_index].STUDY["Study Title"][0]);
+            studies.push({"hash":hashCode(study_id), "id":study_id, "title":study_title})
         }
 
         $("#isa-breadcrumb-items").html('<li class="active">' + studies[0].id + '</li>');
@@ -412,6 +414,7 @@ ISATabViewer.rendering = {
      * @param study_id_hash
      */
     render_study: function (study_id, study_id_hash) {
+
         if (ISATabViewer.rendering.is_empty_investigation())
             this.set_active_list_item(study_id_hash);
 
@@ -429,6 +432,28 @@ ISATabViewer.rendering = {
                 study.study_description = ISATabViewer.rendering.replace_str("\"", "", study_information.STUDY["Study Description"][0]);
                 study.study_file = ISATabViewer.rendering.replace_str("\"", "", study_information.STUDY["Study File Name"][0]);
 
+                var data_files = [];
+
+                if (typeof study_information.STUDY["Comment[Data Repository]"] !== 'undefined' && study_information.STUDY["Comment[Data Repository]"].length >0) {
+                    study.data_repositories = study_information.STUDY["Comment[Data Repository]"][0].split(";");
+                    study.data_record_accessions = study_information.STUDY["Comment[Data Record Accession]"][0].split(";");
+                    study.data_record_uris = study_information.STUDY["Comment[Data Record URI]"][0].split(";");
+
+                    for (var i = 0; i < study.data_repositories.length; i++) {
+                        if (data_files[i] == undefined) {
+                            data_files[i] = {}
+                        }
+                        data_files[i].data_repository = study.data_repositories[i];
+                        data_files[i].data_record_accession = study.data_record_accessions[i];
+                        data_files[i].data_record_uri = study.data_record_uris[i];
+                    }
+
+                    study.data_files = data_files;
+                }
+
+                if (typeof study_information.STUDY["Comment[Subject Keywords]"] != 'undefined' && study_information.STUDY["Comment[Subject Keywords]"].length > 0) {
+                    study.keywords = study_information.STUDY["Comment[Subject Keywords]"][0].split(";");
+                }
 
                 study.publications = ISATabViewer.rendering.generate_records(study_information, "STUDY PUBLICATIONS");
                 study.protocols = ISATabViewer.rendering.generate_records(study_information, "STUDY PROTOCOLS");
@@ -527,13 +552,16 @@ ISATabViewer.rendering = {
         });
     },
 
-    render_isatab_from_file: function (investigation_file, placement, options) {
+    render_isatab_from_file: function (investigation_file, placement, options, invCallBack) {
 
         $.ajax({
             url: investigation_file,
+            //async: false,
             success: function (file) {
+                var investigation;
                 ISATabViewer.investigation.STUDY = [];
-                ISATabViewer.rendering.process_file(investigation_file, file, placement);
+                investigation = ISATabViewer.rendering.process_file(investigation_file, file, placement);
+                //invCallBack(investigation);
             }
         });
     },

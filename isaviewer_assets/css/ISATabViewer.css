@@ -255,13 +255,13 @@ ISA-Tab Viewer CSS
     assay types
 */
 
-#assays, #publications, #samples {
+#assays, #publications, #samples, #data-files {
     padding-bottom: 30px;
     padding-top: 30px;
     border-bottom: #f1f2f1 solid 1px;
 }
 
-.measurement-type, .technology-type {
+.measurement-type, .technology-type, .data-file {
     font-weight: bolder;
     font-size: 1.1em;
 
