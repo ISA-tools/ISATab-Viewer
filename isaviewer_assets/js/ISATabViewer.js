@@ -116,7 +116,6 @@ ISATabViewer.rendering = {
      * @returns {{current_study: *, current_section: *, parts: Array}}
      */
     process_investigation_file_line: function (line_contents, current_study, current_section) {
-
         //ignore lines starting with #
         if (line_contents.lastIndexOf("#", 0) === 0)
             return;
@@ -328,7 +327,7 @@ ISATabViewer.rendering = {
 
         for (var study_index in ISATabViewer.investigation.STUDY) {
             var study_id = ISATabViewer.rendering.replace_str("\"", "", ISATabViewer.investigation.STUDY[study_index].STUDY["Study Identifier"][0]);
-            studies.push({"hash":hashCode(study_id), "id":study_id})
+            studies.push({"hash":hashCode(study_id), "id":study_id, "title": ISATabViewer.investigation.STUDY[study_index].STUDY["Study Title"][0]})
         }
 
         $("#isa-breadcrumb-items").html('<li class="active">' + studies[0].id + '</li>');
