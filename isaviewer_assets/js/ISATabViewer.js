@@ -228,15 +228,20 @@ ISATabViewer.rendering = {
                 dataType: 'jsonp',
                 success: function (file_data) {
 
+
+                    console.log(file_data.div);
                     // we will be breaking things down in to investigation, study and assays. Then rendering everything at the end.
                     var xmlDoc = $.parseXML(file_data.div);
 
                     var filename = file_data.files[0];
 
+
                     if (filename.indexOf('i_') != -1) {
                         // process investigation file
 
-                        var divs = $(xmlDoc).find('div.line');
+
+                        var divs = $(xmlDoc).find('tr');
+
 
                         var current_section = "";
                         var current_study;
@@ -250,12 +255,14 @@ ISATabViewer.rendering = {
                             }
                         }
 
+
+
                         if (current_study != undefined) ISATabViewer.investigation["STUDY"].push(current_study);
 
                         ISATabViewer.rendering.render_study_list(placement);
                     } else {
 
-                        var divs = $(xmlDoc).find('div.line');
+                        var divs = $(xmlDoc).find('tr');
 
                         ISATabViewer.spreadsheets.files[filename] = {"headers": [], "rows": []};
 
