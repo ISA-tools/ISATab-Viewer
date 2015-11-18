@@ -32,7 +32,7 @@ And this is the result!
 
 ### Demo
 
-[View the demo](http://www.antarctic-design.co.uk/isafiles/isaviewer-demo.html). This is preloaded with the contents of this [Gist](https://gist.github.com/eamonnmag/c3c4306af5916856c607).
+[View the demo](http://www.isa-tools.org/format/examples/). 
 
 #Future Work
 
