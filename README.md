@@ -1,13 +1,11 @@
 ISA-Tab Viewer
 ============
 
-<a href="http://dx.doi.org/10.5281/zenodo.11084"><img src="https://zenodo.org/badge/5364/ISA-tools/ISATab-Viewer.png"><a>
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.11084.svg)](https://doi.org/10.5281/zenodo.11084)
 
 A web viewer for ISA-Tab files hosted as 'gists' on Github or on your own file system. Gone are the days of only using ISAcreator.
 
-
-
-###Examples
+### Examples
 
 
 #### Render from files on your web server
@@ -38,10 +36,10 @@ And this is the result!
 
 Create a super lightweight whole repository viewer just using the ISA files. Searching and filtering will also be available and configurable.
 
-#Developers
+# Developers
 
 The ISA team, at the University of Oxford. Created as part of the ISA-a-thon at the BGI Hong Kong offices in China.
 
-#License
+# License
 
 MIT License
