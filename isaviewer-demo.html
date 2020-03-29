@@ -10,14 +10,24 @@
 
     <!-- Load from gist -->
     <div class="toolbar">
-        Provide github gist id to ISA-Tab file to view <input type="text" name="gist" id="gist_id">
+<hr/>
+    <p><span>
+    <!-- react-text: 18 --><a href="https://github.com/ISA-tools/ISATab-Viewer" >ISATab-Viewer </a>- Part of<!-- /react-text --><a href="http://www.isa-tools.org"><img src="./isaviewer_assets/img/isa_footer_logo.svg" alt="ISA-tools" height="20" width="70"></a>
+
+    <!-- react-text: 22 -->Developed and maintained by <!-- /react-text --><a href="http://www.isa-tools.org/team/">the ISA-tools Team</a></span>
+    </p>
+    <hr/>
+        Provide a Github gist identifier to an ISA-Tab file to view <input type="text" name="gist" id="gist_id">
         <span class="btn btn-green" onclick="load_file()">Load File</span>
+
+  
 
         <div style="float: right; margin-right: 25px; margin-top: 3px" id="download-button">
         </div>
     </div>
+      <div>
     <!-- end of load from gist -->
-
+</div>
     <div class="isa-study-list">
         <h3>ISA-Tab files</h3>
         <ul id="study-list">
@@ -240,17 +250,14 @@
     <div class="cf"></div>
     <br/><br/>
 
-    <div id="contacts">
-
-        <span class="section-header">Contacts</span>
+    <div id="protocols">
+        <span class="section-header">Protocols</span>
         <ul>
-            {{#each contacts}}
+            {{#each protocols}}
             <li>
-                <p class="publication-title">{{[Study Person First Name]}} {{[Study Person Last Name]}}</p>
+                <p class="protocol-name">{{[Study Protocol Name]}} ({{[Study Protocol Type]}})</p>
 
-                <p class="publication-authors">{{[Study Person Address]}}</p>
-
-                <p class="publication-pubmedid">{{[Study Person Affiliation]}}</span></p>
+                <p class"protocol-description">{{[Study Protocol Description]}}</span></p>
             </li>
             {{/each}}
         </ul>
@@ -268,18 +275,24 @@
         </ul>
     </div>
 
-    <div id="protocols">
-        <span class="section-header">Protocols</span>
-        <ul>
-            {{#each protocols}}
-            <li>
-                <p class="protocol-name">{{[Study Protocol Name]}} ({{[Study Protocol Type]}})</p>
 
-                <p class"publication-pubmedid">{{[Study Protocol Description]}}</span></p>
+
+        <div id="contacts">
+
+        <span class="section-header">Contacts</span>
+        <ul>
+            {{#each contacts}}
+            <li>
+                <p class="publication-title">{{[Study Person First Name]}} {{[Study Person Last Name]}}</p>
+
+                <p class="publication-authors">{{[Study Person Address]}}</p>
+
+                <p class="publication-pubmedid">{{[Study Person Affiliation]}}</span></p>
             </li>
             {{/each}}
         </ul>
     </div>
+
 
 </script>
 
@@ -289,6 +302,9 @@
         ISATabViewer.rendering.render_isatab_from_gist(value, '#investigation_file', {})
     }
 </script>
+
+
+
 
 </body>
 </html>

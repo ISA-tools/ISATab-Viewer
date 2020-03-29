@@ -8,6 +8,18 @@
  * 2. The use of `table` rather than `block` is only necessary if using
  *    `:before` to contain the top-margins of child elements.
  */
+a {
+  color: #26B99A;
+  font-weight: bolder;
+  font-family: helvetica;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+a:hover {
+  color: #35495E;
+  text-decoration: underline;
+}
+
 .cf:before,
 .cf:after {
     content: " "; /* 1 */
@@ -151,6 +163,7 @@ ISA-Tab Viewer CSS
     padding-top: 10px;
     font-size: 1.2em;
     font-weight: normal;
+    text-align: justify;
 
 }
 
@@ -209,6 +222,7 @@ ISA-Tab Viewer CSS
 #protocols, #factors, #contacts {
     width: 33%;
     float: left;
+    text-align: justify;
 }
 
 #protocols ul, #factors ul, #contacts ul {
@@ -245,6 +259,7 @@ ISA-Tab Viewer CSS
 .protocol-description {
     height: 30px;
     overflow: scroll;
+    text-align: justify;
 }
 
 .protocol-name {
