@@ -10,8 +10,8 @@
 
     <!-- Load from gist -->
     <div class="toolbar">
-        Load ISA-Tab file to view <input type="text" name="gist" id="gist_id"><span class="btn btn-green"
-                                                                                    onclick="load_file()">Load File</span>
+        Provide github gist id to ISA-Tab file to view <input type="text" name="gist" id="gist_id">
+        <span class="btn btn-green" onclick="load_file()">Load File</span>
 
         <div style="float: right; margin-right: 25px; margin-top: 3px" id="download-button">
         </div>
@@ -35,12 +35,17 @@
 </div>
 
 <link href="isaviewer_assets/css/ISATabViewer.css" rel="stylesheet" type="text/css"/>
-<script type="text/javascript" src="isaviewer_assets/js/jquery-1.11.1.min.js"></script>
+<!-- <script type="text/javascript" src="isaviewer_assets/js/jquery-1.11.1.min.js"></script> -->
+<script type="text/javascript" src="isaviewer_assets/js/jquery-2.2.4.js"></script>
 <script type="text/javascript" src="isaviewer_assets/js/handlebars-v1.3.0.js"></script>
 <script type="text/javascript" src="isaviewer_assets/js/ISATabViewer.js"></script>
+
 <script type="text/javascript">
-     ISATabViewer.rendering.render_isatab_from_gist('c3c4306af5916856c607', '#investigation_file', {});
-//    ISATabViewer.rendering.render_isatab_from_file('test_data_sets/BII-S-3/i_gilbert.txt', '#investigation_file', {});
+   
+    ISATabViewer.rendering.render_isatab_from_gist('5fc949ea92ac1f46dce4', '#investigation_file', {});
+  // ISATabViewer.rendering.render_isatab_from_file('test_data_sets/BII-S-3/i_gilbert.txt', '#investigation_file', {});
+    ISATabViewer.rendering.render_isatab_from_file('test_data_sets/PXD017710/i_PXD017710.txt', '#investigation_file', {}); 
+   // 
     //ISATabViewer.rendering.render_isatab_from_file('test_data_sets/BII-I-1/i_investigation.txt', '#investigation_file', {});
     //ISATabViewer.rendering.render_isatab_from_file('test_data_sets/E.carvenicolus-GiGaDB-ISA-tab/i_investigation_100063.txt', '#investigation_file', {});
 //    ISATabViewer.rendering.render_isatab_from_file('test_data_sets/sdata201513-isa1/i_Investigation.txt', '#investigation_file', {});
@@ -50,11 +55,11 @@
 <script id="study-list-template" type="text/x-handlebars-template">
 
     <dl>
-       <!-- <dt>
+        <dt>
             <h4 onclick="ISATabViewer.rendering.render_investigation()">Investigation {{this.investigation_id}}</h4>
         </dt>
         <dd>
-        -->
+        
         {{#each studies}}
         <li id="list-{{this.hash}}" onclick="ISATabViewer.rendering.render_study('{{this.id}}', '{{this.hash}}')">
         {{this.id}}
@@ -142,7 +147,7 @@
 
                 <p class="publication-pubmedid">Pubmed ID <span style="color:#26B99A">{{[Investigation PubMed ID]}}</span></p>
 
-                <p class="publication-doi">DOI <span style="color:#26B99A">{{[Investigation Publication DOI]}}</span></p>
+                <p class="publication-doi">DOI <span style="color:#26B99A"><a href="https://doi.org/{{[Investigation Publication DOI]}}"</a></span></p>
             </li>
             {{/each}}
         </ul>
@@ -226,7 +231,7 @@
 
                 <p class="publication-pubmedid">Pubmed ID <span style="color:#26B99A">{{[Study PubMed ID]}}</span></p>
 
-                <p class="publication-doi">DOI <span style="color:#26B99A">{{[Study Publication DOI]}}</span></p>
+                <p class="publication-doi">DOI <span style="color:#26B99A"><a href="https://doi.org/{{[Study Publication DOI]}}">{{[Study Publication DOI]}}</a></span</p>
             </li>
             {{/each}}
         </ul>
@@ -269,6 +274,8 @@
             {{#each protocols}}
             <li>
                 <p class="protocol-name">{{[Study Protocol Name]}} ({{[Study Protocol Type]}})</p>
+
+                <p class"publication-pubmedid">{{[Study Protocol Description]}}</span></p>
             </li>
             {{/each}}
         </ul>
