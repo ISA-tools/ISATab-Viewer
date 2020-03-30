@@ -9,20 +9,25 @@
 <div id="investigation_file" class="isa-view">
 
     <!-- Load from gist -->
+    <!-- https://gist.github.com/eamonnmag/4a004ef590f5af9a3132 -->
+    <!-- https://gist.github.com/eamonnmag/4a004ef590f5af9a3132.json -->
+    <!-- https://api.github.com/gists/4a004ef590f5af9a3132 -->
+
     <div class="toolbar">
 <hr/>
     <p><span>
-    <!-- react-text: 18 --><a href="https://github.com/ISA-tools/ISATab-Viewer" >ISATab-Viewer </a>- Part of<!-- /react-text --><a href="http://www.isa-tools.org"><img src="./isaviewer_assets/img/isa_footer_logo.svg" alt="ISA-tools" height="20" width="70"></a>
+    <a href="https://github.com/ISA-tools/ISATab-Viewer" >ISATab-Viewer </a>- Part of<a href="http://www.isa-tools.org">
+        <img src="./isaviewer_assets/img/isa_footer_logo.svg" alt="ISA-tools" height="20" width="70"></a>
 
-    <!-- react-text: 22 -->Developed and maintained by <!-- /react-text --><a href="http://www.isa-tools.org/team/">the ISA-tools Team</a></span>
+    Developed and maintained by<a href="http://www.isa-tools.org/team/">the ISA-tools Team</a></span>
     </p>
     <hr/>
         Provide a Github gist identifier to an ISA-Tab file to view <input type="text" name="gist" id="gist_id">
-        <span class="btn btn-green" onclick="load_file()">Load File</span>
 
-  
+        <span class="btn btn-green" onclick="load_file()">Load File from Github Gist</span>
 
         <div style="float: right; margin-right: 25px; margin-top: 3px" id="download-button">
+
         </div>
     </div>
       <div>
@@ -32,6 +37,7 @@
         <h3>ISA-Tab files</h3>
         <ul id="study-list">
         </ul>
+
     </div>
 
     <div class="isa-main-view">
@@ -49,17 +55,25 @@
 <script type="text/javascript" src="isaviewer_assets/js/jquery-2.2.4.js"></script>
 <script type="text/javascript" src="isaviewer_assets/js/handlebars-v1.3.0.js"></script>
 <script type="text/javascript" src="isaviewer_assets/js/ISATabViewer.js"></script>
+<script type="text/javascript" src="isaviewer_assets/js/jszip.min.js"></script>
 
 <script type="text/javascript">
    
     ISATabViewer.rendering.render_isatab_from_gist('5fc949ea92ac1f46dce4', '#investigation_file', {});
-  // ISATabViewer.rendering.render_isatab_from_file('test_data_sets/BII-S-3/i_gilbert.txt', '#investigation_file', {});
+    // ISATabViewer.rendering.render_isatab_from_file('test_data_sets/BII-S-3/i_gilbert.txt', '#investigation_file', {});
     ISATabViewer.rendering.render_isatab_from_file('test_data_sets/PXD017710/i_PXD017710.txt', '#investigation_file', {}); 
    // 
     //ISATabViewer.rendering.render_isatab_from_file('test_data_sets/BII-I-1/i_investigation.txt', '#investigation_file', {});
     //ISATabViewer.rendering.render_isatab_from_file('test_data_sets/E.carvenicolus-GiGaDB-ISA-tab/i_investigation_100063.txt', '#investigation_file', {});
 //    ISATabViewer.rendering.render_isatab_from_file('test_data_sets/sdata201513-isa1/i_Investigation.txt', '#investigation_file', {});
      //ISATabViewer.rendering.render_isatab_from_file('test_data_sets/sdata201411-isa1/i_investigation.txt', '#investigation_file', {});
+</script>
+
+<script>
+    function load_file() {
+        var value = $("#gist_id").val();
+        ISATabViewer.rendering.render_isatab_from_gist(value, '#investigation_file', {})
+    }
 </script>
 
 <script id="study-list-template" type="text/x-handlebars-template">
@@ -73,7 +87,7 @@
         {{#each studies}}
         <li id="list-{{this.hash}}" onclick="ISATabViewer.rendering.render_study('{{this.id}}', '{{this.hash}}')">
         {{this.id}}
-        </li>
+        </li> <a href="./test_data_sets/{{this.id}}/{{this.id}}.zip" download={{this.id}} class="btn btn-green" >download zip</a>
         {{/each}}
         </dd>
     </dl>
@@ -296,12 +310,12 @@
 
 </script>
 
-<script>
+<!-- <script>
     function load_file() {
         var value = $("#gist_id").val();
         ISATabViewer.rendering.render_isatab_from_gist(value, '#investigation_file', {})
     }
-</script>
+</script> -->
 
 
 
