@@ -55,13 +55,17 @@
 <script type="text/javascript" src="isaviewer_assets/js/jquery-2.2.4.js"></script>
 <script type="text/javascript" src="isaviewer_assets/js/handlebars-v1.3.0.js"></script>
 <script type="text/javascript" src="isaviewer_assets/js/ISATabViewer.js"></script>
-<script type="text/javascript" src="isaviewer_assets/js/jszip.min.js"></script>
+<!-- <script type="text/javascript" src="isaviewer_assets/js/jszip.min.js"></script> -->
 
 <script type="text/javascript">
    
-    ISATabViewer.rendering.render_isatab_from_gist('5fc949ea92ac1f46dce4', '#investigation_file', {});
+    // READING FROM A GIST hosted ISA EXAMPLE
+    // ISATabViewer.rendering.render_isatab_from_gist('5fc949ea92ac1f46dce4', '#investigation_file', {});
+
+    // READING FROM A LOCAL ISA EXAMPLE
+    ISATabViewer.rendering.render_isatab_from_file('test_data_sets/PXD017710/i_PXD017710.txt', '#investigation_file', {});
     // ISATabViewer.rendering.render_isatab_from_file('test_data_sets/BII-S-3/i_gilbert.txt', '#investigation_file', {});
-    ISATabViewer.rendering.render_isatab_from_file('test_data_sets/PXD017710/i_PXD017710.txt', '#investigation_file', {}); 
+ 
    // 
     //ISATabViewer.rendering.render_isatab_from_file('test_data_sets/BII-I-1/i_investigation.txt', '#investigation_file', {});
     //ISATabViewer.rendering.render_isatab_from_file('test_data_sets/E.carvenicolus-GiGaDB-ISA-tab/i_investigation_100063.txt', '#investigation_file', {});
